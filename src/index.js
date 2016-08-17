@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import SearchBar from './components/search_bar';
 import YTSearch from 'youtube-api-search';
 import VideoList from './components/video_list';
+import VideoDetail from './components/video_detail';
 // get it from cosole.google
 const API_KEY = 'AIzaSyAK0sIaPpQr773qfrxx9l6S5kVFhGCFD2Q';
 // this is the componet class  //  React.CreateClass
@@ -11,26 +12,39 @@ const API_KEY = 'AIzaSyAK0sIaPpQr773qfrxx9l6S5kVFhGCFD2Q';
  } */
 // using ES 6 fat arrow for function //  this will have differnt this useage
 
-
+// parents can not get details instantly add check to handle null props;
 
 class  App extends Component {
 	constructor(props) {
 
 							super(props);
 
-							YTSearch({key:API_KEY,term:'surfboards'},(data) => {
-								this.setState({videos:data});
-							})
+							// initialy loading results of surf boards
+							this.videoSearch('surfboards');
 
-							this.state={videos:[]};
+							this.state={
+								videos:[],
+								selectedVideo:null
+							};
 
 						}
+
+						videoSearch(term){
+							YTSearch({key:API_KEY,term:term},(videos) => {
+								this.setState({
+									videos:videos,
+									selectedVideo:videos[0]
+								});
+							})
+						}
+
 
 		render(){
 			return (
 						<div>
-							< SearchBar />
-							< VideoList videos={this.state.videos} />
+							<SearchBar onSearchTermChange={term =>this.videoSearch(term) } />
+							<VideoDetail video={this.state.selectedVideo} />
+							<VideoList onVideoSelect={ selectedVideo => this.setState({selectedVideo}) } videos={this.state.videos} />
 						</div>
 					);
 			 }
