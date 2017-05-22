@@ -12,13 +12,14 @@ class SearchBar extends Component {
         super(props);
         // to record the state of the component each instance of component will have its own state creating
         // a state inside constructor
-        this.state = {term: 'Enter the video to be searched'};
+        this.state = {term: ''};
         // creating a state
     }
     // this.setState() is a predefined react function to change state variable
     render() {
         return ( < div className="search-bar">
-          < input value = {this.state.term}
+
+          < input value = {this.state.term} placeholder="Enter The Search String"
           onChange = {event => this.onInputChange(event.target.value)} / >
 
          < /div >
